@@ -8,8 +8,8 @@ export default function RegisterGrid(props) {
     
     let blocks = [];
     
-    for(let i = 0; i < props.ram_array.length; i++) {
-        blocks.push(<RegisterBlock index={i} value={props.ram_array[i]} />)
+    for(let i = 0; i < props.regs.R.length; i++) {
+        blocks.push(<RegisterBlock key={`reg${i}`} index={i} value={props.regs.R[i]} />)
     }
     
     return (
