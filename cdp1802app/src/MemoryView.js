@@ -10,38 +10,80 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+    fontSize: 12,
+    fontWeight: "bold",
+    fontFamily: "monospace"
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 12,
+    fontFamily: "monospace"
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
+
 export default function MemoryView(props) {
-    
     let hex_columns = [];
     let rows = [];
     
     for(let i = 0; i<16; i++) {
-        hex_columns.push(<TableCell align="center" >{i.toString(16).toUpperCase().padStart(2, "0")}</TableCell>);
+        hex_columns.push(<StyledTableCell align="center" key={`headNum${i}`} >{i.toString(16).toUpperCase()}</StyledTableCell>);
     }
     
     for(let y = 0; y < 16; y++) {
         let line = [];
+        let end_string = "";
+        
         for(let x = 0; x < 16; x++) {
-            line.push(<TableCell align="center" key={`row${y}c${x}`} >{props.mem[(y * 16) + x].toString(16).toUpperCase().padStart(2, "0")}</TableCell>);
+            const new_sx = {};
+            
+            let real_address = (y * 16) + x;
+            
+            if(real_address === props.pc) {
+                new_sx["backgroundColor"] = "#009900";
+                new_sx["color"] = "#fff";
+            }
+            
+            line.push(<StyledTableCell sx={new_sx} align="center" key={`row${y}c${x}`} >{props.mem[real_address].toString(16).toUpperCase().padStart(2, "0")}</StyledTableCell>);
+            
+            if(props.mem[real_address] > 31 && props.mem[real_address] < 127) {
+                end_string += String.fromCharCode(props.mem[real_address]);
+            }
+            else {
+                end_string += ".";
+            }
         }
+        
         rows.push(
-            <TableRow>
-                <TableCell key={`rown${y}`}>{`0x${(y * 16).toString(16).toUpperCase().padStart(2, "0")}`}</TableCell>
+            <StyledTableRow key={`rownum${y}`} >
+                <StyledTableCell key={`rowaddr${y}`} >{`0x${(y * 16).toString(16).toUpperCase().padStart(2, "0")}:`}</StyledTableCell>
                 {line}
-                <TableCell>{"................"}</TableCell>
-            </TableRow>
+                <StyledTableCell key={`rowstr${y}`} >{end_string}</StyledTableCell>
+            </StyledTableRow>
         );
     }
     
     return (
         <Box>
         <TableContainer component={Paper} >
-            <Table sx={{ minWidth: 300, fontSize: 12 }} size="small" >
+            <Table sx={{ minWidth: 200 }} size="small" >
                 <TableHead>
                     <TableRow>
-                        <TableCell>Address</TableCell>
+                        <StyledTableCell>Address</StyledTableCell>
                         {hex_columns}
-                        <TableCell>String</TableCell>
+                        <StyledTableCell>String</StyledTableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

@@ -9,11 +9,14 @@ let registers = {
     B: 0,
     P: 0,
     T: 0,
-    IE: 0,
-    Q: 0
+    IE: 1,
+    Q: 0,
+    S: 1
 };
 
 let memory = Array(256).fill(0);
+
+let cpu_init = true;
 
 const getRegisters = function() {
     return registers;
@@ -23,7 +26,52 @@ const getMemory = function() {
     return memory;
 };
 
+const loadMemory = function(data) {
+    for(let i = 0; i < data.length; i++) {
+        memory[i] = data[i];
+    }
+};
+
+const resetCpu = function() {
+    for(let i = 0; i < registers.R.length; i++) {
+        registers.R[i] = 0;
+    }
+    
+    registers.I = 0;
+    registers.N = 0;
+    registers.Q = 0;
+    registers.X = 0;
+    registers.P = 0;
+    registers.IE = 1;
+    registers.S = 1;
+    cpu_init = true;
+};
+
+const nextCycle = function() {
+    if(cpu_init) {
+        registers.S = 0;
+        cpu_init = false;
+        return;
+    }
+    
+    if(registers.S === 0) {
+        registers.I = (memory[registers.R[registers.P]] & 0xF0) >> 4;
+        registers.N = (memory[registers.R[registers.P]] & 0x0F);
+        registers.R[registers.P]++;
+        registers.S++;
+        return;
+    }
+    
+    if(registers.S === 1) {
+        registers.S = 0;
+        return;
+    }
+}
+
 module.exports = {
     getRegisters: getRegisters,
-    getMemory: getMemory
+    getMemory: getMemory,
+    loadMemory: loadMemory,
+    resetCpu: resetCpu,
+    nextCycle: nextCycle
 };
