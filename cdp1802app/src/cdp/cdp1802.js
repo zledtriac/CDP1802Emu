@@ -1,4 +1,6 @@
 
+const inst = require("./instructions");
+
 let registers = {
     R: Array(16).fill(0),
     D: 0,
@@ -14,7 +16,12 @@ let registers = {
     S: 1
 };
 
-let memory = Array(256).fill(0);
+let inputs = {
+    Interrupt: 1,
+    EF: 15
+};
+
+let memory = Array(256).fill(0xFF);
 
 let cpu_init = true;
 
@@ -48,11 +55,6 @@ const resetCpu = function() {
 };
 
 const nextCycle = function() {
-    if(cpu_init) {
-        registers.S = 0;
-        cpu_init = false;
-        return;
-    }
     
     if(registers.S === 0) {
         registers.I = (memory[registers.R[registers.P]] & 0xF0) >> 4;
@@ -63,9 +65,9 @@ const nextCycle = function() {
     }
     
     if(registers.S === 1) {
-        registers.S = 0;
+        inst.executeInstruction(memory, registers, inputs, cpu_init);
         return;
-    }
+    }    
 }
 
 module.exports = {

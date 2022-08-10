@@ -12,7 +12,7 @@ import { styled } from '@mui/material/styles';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: "#48374B",
     color: theme.palette.common.white,
     fontSize: 12,
     fontWeight: "bold",
@@ -25,8 +25,9 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  backgroundColor: "#503D54",
   '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
+    backgroundColor: "#5B4660",
   },
   // hide last border
   '&:last-child td, &:last-child th': {

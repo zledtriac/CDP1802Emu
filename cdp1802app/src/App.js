@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
@@ -13,6 +14,16 @@ import RegisterGrid from './RegisterGrid';
 import MemoryView from './MemoryView';
 
 const cdp = require("./cdp/cdp1802");
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    background: {
+        default: "#261C2C"
+    },
+    divider: "#B396B8"
+  },
+});
 
 function App() {
   const inputFile = React.useRef(null);
@@ -51,8 +62,9 @@ function App() {
   
   return (
     <div className="App">
+        <ThemeProvider theme={darkTheme}>
         <CssBaseline />
-        <Box>
+        <Box sx={{ padding: "10px" }} >
             <Grid container columns={4} spacing={1} >
                 <Grid item xs={1} >
                     <RegisterGrid regs={registers} upd={changer} />
@@ -70,6 +82,7 @@ function App() {
                 </Grid>
             </Grid>
         </Box>
+        </ThemeProvider>
     </div>
   );
 }

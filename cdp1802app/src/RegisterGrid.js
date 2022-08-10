@@ -19,6 +19,7 @@ export default function RegisterGrid(props) {
             <RegisterBlock key="regD" name="D" value={props.regs.D} bits={8} size={4} />
             <RegisterBlock key="regI" name="I" value={props.regs.I} bits={4} size={2} />
             <RegisterBlock key="regN" name="N" value={props.regs.N} bits={4} size={2} />
+            <RegisterBlock key="regT" name="T" value={props.regs.T} bits={8} size={4} />
             <RegisterBlock key="regP" name="P" value={props.regs.P} bits={4} size={2} />
             <RegisterBlock key="regX" name="X" value={props.regs.X} bits={4} size={2} />
             <RegisterBlock key="regDF" name="DF" value={props.regs.DF} bits={1} size={1} />
@@ -40,7 +41,7 @@ function RegisterBlock(props) {
 }
 
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  backgroundColor: theme.palette.mode === 'dark' ? '#3E2C41' : '#fff',
   ...theme.typography.body2,
   padding: theme.spacing(0.5),
   textAlign: 'center',
