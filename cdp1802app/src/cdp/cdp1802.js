@@ -18,7 +18,13 @@ let registers = {
 
 let inputs = {
     Interrupt: 1,
-    EF: 15
+    EF: 15,
+    BUS: 0
+};
+
+let outputs = {
+    N: 0,
+    BUS: 0
 };
 
 let memory = Array(256).fill(0xFF);
@@ -65,9 +71,22 @@ const nextCycle = function() {
     }
     
     if(registers.S === 1) {
-        inst.executeInstruction(memory, registers, inputs, cpu_init);
+        inst.executeInstruction(memory, registers, inputs, outputs, cpu_init);
+        cpu_init = false;
         return;
-    }    
+    }
+    
+    if(registers.S === 2) {
+        registers.S = 0;
+        return;
+    }
+    
+    if(registers.S === 3) {
+        registers.T = ((registers.X << 4) | registers.P) & 0xFF;
+        registers.IE = 0;
+        registers.P = 1;
+        registers.X = 2;
+    }
 }
 
 module.exports = {
