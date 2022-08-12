@@ -269,15 +269,74 @@ const ADCI = function(memory, registers, inputs, outputs) {
     return 0;
 };
 
+const SDBI = function(memory, registers, inputs, outputs) {
+    registers.D = memory[registers.R[registers.P]] - registers.D - (registers.DF ^ 0x01);
+    registers.DF = (registers.D >> 8) & 0x01;
+    registers.D = registers.D & 0xFF;
+    registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
+    return 0;
+};
+
+const SHLC = function(memory, registers, inputs, outputs) {
+    registers.D = (registers.D << 1) | registers.DF;
+    registers.DF = (registers.D & 0x100) ? 1 : 0;
+    return 0;
+};
+
+const SMBI = function(memory, registers, inputs, outputs) {
+    registers.D = registers.D - memory[registers.R[registers.X]] - (registers.DF ^ 0x01);
+    registers.DF = (registers.D >> 8) & 0x01;
+    registers.D = registers.D & 0xFF;
+    registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
+    return 0;
+};
+
+const GLO = function(memory, registers, inputs, outputs) {
+    if(registers.I & 0x01) {
+        registers.D = (registers.R[registers.N] >> 8) & 0x00FF;
+        return 0;
+    }
+    
+    registers.D = registers.R[registers.N] & 0x00FF;
+    return 0;
+};
+
+const PLO = function(memory, registers, inputs, outputs) {
+    if(registers.I & 0x01) {
+        registers.R[registers.N] = (registers.R[registers.N] & 0x00FF) | (registers.D << 8);
+        return 0;
+    }
+    
+    registers.R[registers.N] = (registers.R[registers.N] & 0xFF00) | registers.D;
+    return 0;
+};
+
+// Long branches-------------------------------------------------------------------------------------------------------------------------------
+
+const LBR = function(memory, registers, inputs, outputs) {
+    const conditions = [
+        true,
+        registers.Q === 1,
+        registers.D === 0,
+        registers.DF === 1,
+        false,
+        
+    ];
+};
+
 const instructions = [
-    [ IDL, LDN, LDN,  LDN,  LDN, LDN, LDN,  LDN, LDN, LDN,  LDN, LDN, LDN,  LDN, LDN, LDN ], //Group 0.
-    [ INC, INC, INC,  INC,  INC, INC, INC,  INC, INC, INC,  INC, INC, INC,  INC, INC, INC ], //Group 1.
-    [ DEC, DEC, DEC,  DEC,  DEC, DEC, DEC,  DEC, DEC, DEC,  DEC, DEC, DEC,  DEC, DEC, DEC ], //Group 2.
-    [ BR,  BQ,  BZ,   BDF,  B1,  B2,  B3,   B4,  NBR, BNQ,  BNZ, BNF, BN1,  BN2, BN3, BN4 ], //Group 3.
-    [ LDA, LDA, LDA,  LDA,  LDA, LDA, LDA,  LDA, LDA, LDA,  LDA, LDA, LDA,  LDA, LDA, LDA ], //Group 4.
-    [ STR, STR, STR,  STR,  STR, STR, STR,  STR, STR, STR,  STR, STR, STR,  STR, STR, STR ], //Group 5.
-    [ IRX, OUT, OUT,  OUT,  OUT, OUT, OUT,  OUT, INP, INP,  INP, INP, INP,  INP, INP, INP ], //Group 6.
-    [ RET, DIS, LDXA, STXD, ADC, SDB, SHRC, SMB, SAV, MARK, REQ, REQ, ADCI,  ]
+    [ IDL, LDN, LDN,  LDN,  LDN, LDN, LDN,  LDN, LDN, LDN,  LDN, LDN, LDN,  LDN,  LDN,  LDN  ], //Group 0
+    [ INC, INC, INC,  INC,  INC, INC, INC,  INC, INC, INC,  INC, INC, INC,  INC,  INC,  INC  ], //Group 1
+    [ DEC, DEC, DEC,  DEC,  DEC, DEC, DEC,  DEC, DEC, DEC,  DEC, DEC, DEC,  DEC,  DEC,  DEC  ], //Group 2
+    [ BR,  BQ,  BZ,   BDF,  B1,  B2,  B3,   B4,  NBR, BNQ,  BNZ, BNF, BN1,  BN2,  BN3,  BN4  ], //Group 3
+    [ LDA, LDA, LDA,  LDA,  LDA, LDA, LDA,  LDA, LDA, LDA,  LDA, LDA, LDA,  LDA,  LDA,  LDA  ], //Group 4
+    [ STR, STR, STR,  STR,  STR, STR, STR,  STR, STR, STR,  STR, STR, STR,  STR,  STR,  STR  ], //Group 5
+    [ IRX, OUT, OUT,  OUT,  OUT, OUT, OUT,  OUT, INP, INP,  INP, INP, INP,  INP,  INP,  INP  ], //Group 6
+    [ RET, DIS, LDXA, STXD, ADC, SDB, SHRC, SMB, SAV, MARK, REQ, REQ, ADCI, SDBI, SHLC, SMBI ], //Group 7
+    [ GLO, GLO, GLO,  GLO,  GLO, GLO, GLO,  GLO, GLO, GLO,  GLO, GLO, GLO,  GLO,  GLO,  GLO  ], //Group 8
+    [ GLO, GLO, GLO,  GLO,  GLO, GLO, GLO,  GLO, GLO, GLO,  GLO, GLO, GLO,  GLO,  GLO,  GLO  ], //Group 9
+    [ PLO, PLO, PLO,  PLO,  PLO, PLO, PLO,  PLO, PLO, PLO,  PLO, PLO, PLO,  PLO,  PLO,  PLO  ], //Group A
+    [ PLO, PLO, PLO,  PLO,  PLO, PLO, PLO,  PLO, PLO, PLO,  PLO, PLO, PLO,  PLO,  PLO,  PLO  ], //Group B
 ];
 
 const executeInstruction = function(memory, registers, inputs, outputs, init) {
