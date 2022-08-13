@@ -108,26 +108,28 @@ const STXD = function(memory, registers, inputs, outputs) {
 
 const ADC = function(memory, registers, inputs, outputs) {
     registers.D = memory[registers.R[registers.X]] + registers.D + registers.DF;
-    registers.DF = (registers.D >> 8) & 0x01;
+    registers.DF = (registers.D & 0x100) ? 1 : 0;
     registers.D = registers.D & 0xFF;
     return 0;
 };
 
 const SDB = function(memory, registers, inputs, outputs) {
     registers.D = memory[registers.R[registers.X]] - registers.D - (registers.DF ^ 0x01);
-    registers.DF = (registers.D >> 8) & 0x01;
+    registers.DF = (registers.D & 0x100) ? 0 : 1;
     registers.D = registers.D & 0xFF;
     return 0;
 };
 
 const SHRC = function(memory, registers, inputs, outputs) {
-    registers.D = (registers.D >> 1) | ((registers.D & 0x01) << 7);
+    let temp_df = registers.D & 0x01;
+    registers.D = ((registers.D >> 1) | ((registers.DF) ? 0x80 : 0x00)) & 0xFF;
+    registers.DF = temp_df;
     return 0;
 };
 
 const SMB = function(memory, registers, inputs, outputs) {
     registers.D = registers.D - memory[registers.R[registers.X]] - (registers.DF ^ 0x01);
-    registers.DF = (registers.D >> 8) & 0x01;
+    registers.DF = (registers.D & 0x100) ? 0 : 1;
     registers.D = registers.D & 0xFF;
     return 0;
 };
@@ -146,13 +148,13 @@ const MARK = function(memory, registers, inputs, outputs) {
 };
 
 const REQ = function(memory, registers, inputs, outputs) {
-    registers.Q = (registers.N - 0x0A) & 0x01;
+    registers.Q = registers.N & 0x01;
     return 0;
 };
 
 const ADCI = function(memory, registers, inputs, outputs) {
     registers.D = memory[registers.R[registers.P]] + registers.D + registers.DF;
-    registers.DF = (registers.D >> 8) & 0x01;
+    registers.DF = (registers.D & 0x100) ? 1 : 0;
     registers.D = registers.D & 0xFF;
     registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
     return 0;
@@ -160,7 +162,7 @@ const ADCI = function(memory, registers, inputs, outputs) {
 
 const SDBI = function(memory, registers, inputs, outputs) {
     registers.D = memory[registers.R[registers.P]] - registers.D - (registers.DF ^ 0x01);
-    registers.DF = (registers.D >> 8) & 0x01;
+    registers.DF = (registers.D & 0x100) ? 0 : 1;
     registers.D = registers.D & 0xFF;
     registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
     return 0;
@@ -174,7 +176,7 @@ const SHLC = function(memory, registers, inputs, outputs) {
 
 const SMBI = function(memory, registers, inputs, outputs) {
     registers.D = registers.D - memory[registers.R[registers.X]] - (registers.DF ^ 0x01);
-    registers.DF = (registers.D >> 8) & 0x01;
+    registers.DF = (registers.D & 0x100) ? 0 : 1;
     registers.D = registers.D & 0xFF;
     registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
     return 0;
@@ -199,8 +201,6 @@ const PLO = function(memory, registers, inputs, outputs) {
     registers.R[registers.N] = (registers.R[registers.N] & 0xFF00) | registers.D;
     return 0;
 };
-
-// Long branches-----------------------------------------------------------------------------------
 
 const LBR = function(memory, registers, inputs, outputs) {
     const conditions = [
@@ -237,8 +237,6 @@ const LBR = function(memory, registers, inputs, outputs) {
     input_data_cnt = 0;
     return 0;
 };
-
-//------------------------------------------------------------------------------------------------
 
 const SEP = function(memory, registers, inputs, outputs) {
     if(registers.I && 0x01) {
