@@ -263,20 +263,20 @@ const LDX = function(memory, registers, inputs, outputs) {
         [registers.D - MRX, true]
     ];
     
-    if(results[registers.N][1]) {
+    if(results[registers.N & 0x07][1]) {
         if(registers.N === 0x04 || registers.N === 0x0C || registers.N === 0x0E) {
-            registers.DF = (results[registers.N][0] & 0x100) ? 1 : 0;
+            registers.DF = (results[registers.N & 0x07][0] & 0x100) ? 1 : 0;
         }
         if(registers.N === 0x05 || registers.N === 0x07 || registers.N === 0x0D || registers.N === 0x0F) {
-            registers.DF = (results[registers.N][0] & 0x100) ? 0 : 1;
+            registers.DF = (results[registers.N & 0x07][0] & 0x100) ? 0 : 1;
         }
         if(registers.N === 0x06) {
             registers.DF = (registers.D & 0x01) ? 1 : 0;
         }
     }
     
-    registers.D = results[registers.N][0] & 0xFF;
-    if(registers.N & 0x80) registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
+    registers.D = results[registers.N & 0x07][0] & 0xFF;
+    if(registers.N & 0x08) registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
     return 0;
 };
 
