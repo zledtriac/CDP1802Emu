@@ -311,15 +311,58 @@ const PLO = function(memory, registers, inputs, outputs) {
     return 0;
 };
 
-// Long branches-------------------------------------------------------------------------------------------------------------------------------
+// Long branches-----------------------------------------------------------------------------------
 
 const LBR = function(memory, registers, inputs, outputs) {
     const conditions = [
-        true,
-        registers.Q === 1,
-        registers.D === 0,
-        registers.DF === 1,
-        false,
+        [ true,               true          ],
+        [ registers.Q,        true          ],
+        [ !registers.D,       true          ],
+        [ registers.DF,       true          ],
+        [ false,              false         ],
+        [ false,              !registers.Q  ],
+        [ false,              registers.D   ],
+        [ false,              !registers.DF ],
+        [ false,              true          ],
+        [ !registers.Q,       false         ],
+        [ registers.D,        false         ],
+        [ !registers.DF,      false         ],
+        [ false,              registers.IE  ],
+        [ false,              registers.Q   ],
+        [ false,              !registers.D  ],
+        [ false,              registers.DF  ]
+    ];
+        
+    if(!input_data_cnt) {
+        if(conditions[registers.N][0]) registers.B = memory[registers.R[registers.P]];
+        if(conditions[registers.N][1]) registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
+        input_data_cnt++;
+        return 1;
+    }
+
+    if(conditions[registers.N][0]) {
+        registers.R[registers.P] = ((registers.B << 8) | memory[registers.R[registers.P]]) & 0xFFFF;
+        return 0;
+    }
+    if(conditions[registers.N][1]) registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
+    input_data_cnt = 0;
+    return 0;
+};
+
+//------------------------------------------------------------------------------------------------
+
+const SEP = function(memory, registers, inputs, outputs) {
+    if(registers.I && 0x01) {
+        registers.X = registers.N;
+        return 0;
+    }
+    
+    registers.P = registers.N;
+    return 0;
+};
+
+const LDX = function(memory, registers, inputs, outputs) {
+    const results = [
         
     ];
 };
@@ -337,6 +380,10 @@ const instructions = [
     [ GLO, GLO, GLO,  GLO,  GLO, GLO, GLO,  GLO, GLO, GLO,  GLO, GLO, GLO,  GLO,  GLO,  GLO  ], //Group 9
     [ PLO, PLO, PLO,  PLO,  PLO, PLO, PLO,  PLO, PLO, PLO,  PLO, PLO, PLO,  PLO,  PLO,  PLO  ], //Group A
     [ PLO, PLO, PLO,  PLO,  PLO, PLO, PLO,  PLO, PLO, PLO,  PLO, PLO, PLO,  PLO,  PLO,  PLO  ], //Group B
+    [ LBR, LBR, LBR,  LBR,  LBR, LBR, LBR,  LBR, LBR, LBR,  LBR, LBR, LBR,  LBR,  LBR,  LBR  ], //Group C
+    [ SEP, SEP, SEP,  SEP,  SEP, SEP, SEP,  SEP, SEP, SEP,  SEP, SEP, SEP,  SEP,  SEP,  SEP  ], //Gtoup D
+    [ SEP, SEP, SEP,  SEP,  SEP, SEP, SEP,  SEP, SEP, SEP,  SEP, SEP, SEP,  SEP,  SEP,  SEP  ], //Gtoup E
+    
 ];
 
 const executeInstruction = function(memory, registers, inputs, outputs, init) {
