@@ -20,145 +20,34 @@ const DEC = function(memory, registers, inputs, outputs) {
     return 0;
 };
 
-// Short branches-----------------------------------------------------------------------------------------------------------------
-
 const BR = function(memory, registers, inputs, outputs) {
-    registers.R[registers.P] = (registers.R[registers.P] & 0xFF00) | (memory[registers.R[registers.P]] & 0x00FF);
-    return 0;
-};
-
-const BQ = function(memory, registers, inputs, outputs) {
-    if(registers.Q) {
+    const conditions = [
+        true,
+        registers.Q,
+        !registers.D,
+        registers.DF,
+        (inputs.EF ^ 0x0F) & 0x01,
+        (inputs.EF ^ 0x0F) & 0x02,
+        (inputs.EF ^ 0x0F) & 0x04,
+        (inputs.EF ^ 0x0F) & 0x08,
+        false,
+        !registers.Q,
+        registers.D,
+        !registers.DF,
+        inputs.EF & 0x01,
+        inputs.EF & 0x02,
+        inputs.EF & 0x04,
+        inputs.EF & 0x08
+    ];
+    
+    if(conditions[registers.N]) {
         registers.R[registers.P] = (registers.R[registers.P] & 0xFF00) | (memory[registers.R[registers.P]] & 0x00FF);
         return 0;
     }
+    
     registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
     return 0;
 };
-
-const BZ = function(memory, registers, inputs, outputs) {
-    if(!registers.D) {
-        registers.R[registers.P] = (registers.R[registers.P] & 0xFF00) | (memory[registers.R[registers.P]] & 0x00FF);
-        return 0;
-    }
-    registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
-    return 0;
-};
-
-const BDF = function(memory, registers, inputs, outputs) {
-    if(registers.DF) {
-        registers.R[registers.P] = (registers.R[registers.P] & 0xFF00) | (memory[registers.R[registers.P]] & 0x00FF);
-        return 0;
-    }
-    registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
-    return 0;
-};
-
-const B1 = function(memory, registers, inputs, outputs) {
-    if((inputs.EF ^ 0x0F) & 0x01) {
-        registers.R[registers.P] = (registers.R[registers.P] & 0xFF00) | (memory[registers.R[registers.P]] & 0x00FF);
-        return 0;
-    }
-    registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
-    return 0;
-};
-
-const B2 = function(memory, registers, inputs, outputs) {
-    if((inputs.EF ^ 0x0F) & 0x02) {
-        registers.R[registers.P] = (registers.R[registers.P] & 0xFF00) | (memory[registers.R[registers.P]] & 0x00FF);
-        return 0;
-    }
-    registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
-    return 0;
-};
-
-const B3 = function(memory, registers, inputs, outputs) {
-    if((inputs.EF ^ 0x0F) & 0x04) {
-        registers.R[registers.P] = (registers.R[registers.P] & 0xFF00) | (memory[registers.R[registers.P]] & 0x00FF);
-        return 0;
-    }
-    registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
-    return 0;
-};
-
-const B4 = function(memory, registers, inputs, outputs) {
-    if((inputs.EF ^ 0x0F) & 0x08) {
-        registers.R[registers.P] = (registers.R[registers.P] & 0xFF00) | (memory[registers.R[registers.P]] & 0x00FF);
-        return 0;
-    }
-    registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
-    return 0;
-};
-
-const NBR = function(memory, registers, inputs, outputs) {
-    registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
-    return 0;
-};
-
-const BNQ = function(memory, registers, inputs, outputs) {
-    if(!registers.Q) {
-        registers.R[registers.P] = (registers.R[registers.P] & 0xFF00) | (memory[registers.R[registers.P]] & 0x00FF);
-        return 0;
-    }
-    registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
-    return 0;
-};
-
-const BNZ = function(memory, registers, inputs, outputs) {
-    if(registers.D) {
-        registers.R[registers.P] = (registers.R[registers.P] & 0xFF00) | (memory[registers.R[registers.P]] & 0x00FF);
-        return 0;
-    }
-    registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
-    return 0;
-};
-
-const BNF = function(memory, registers, inputs, outputs) {
-    if(!registers.DF) {
-        registers.R[registers.P] = (registers.R[registers.P] & 0xFF00) | (memory[registers.R[registers.P]] & 0x00FF);
-        return 0;
-    }
-    registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
-    return 0;
-};
-
-const BN1 = function(memory, registers, inputs, outputs) {
-    if(inputs.EF & 0x01) {
-        registers.R[registers.P] = (registers.R[registers.P] & 0xFF00) | (memory[registers.R[registers.P]] & 0x00FF);
-        return 0;
-    }
-    registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
-    return 0;
-};
-
-const BN2 = function(memory, registers, inputs, outputs) {
-    if(inputs.EF & 0x02) {
-        registers.R[registers.P] = (registers.R[registers.P] & 0xFF00) | (memory[registers.R[registers.P]] & 0x00FF);
-        return 0;
-    }
-    registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
-    return 0;
-};
-
-const BN3 = function(memory, registers, inputs, outputs) {
-    if(inputs.EF & 0x04) {
-        registers.R[registers.P] = (registers.R[registers.P] & 0xFF00) | (memory[registers.R[registers.P]] & 0x00FF);
-        return 0;
-    }
-    registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
-    return 0;
-};
-
-const BN4 = function(memory, registers, inputs, outputs) {
-    if(inputs.EF & 0x08) {
-        registers.R[registers.P] = (registers.R[registers.P] & 0xFF00) | (memory[registers.R[registers.P]] & 0x00FF);
-        return 0;
-    }
-    registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
-    return 0;
-};
-
-//--------------------------------------------------------------------------------------------------------------------------------
 
 const LDA = function(memory, registers, inputs, outputs) {
     registers.D = memory[registers.R[registers.N]];
@@ -361,17 +250,43 @@ const SEP = function(memory, registers, inputs, outputs) {
     return 0;
 };
 
-const LDX = function(memory, registers, inputs, outputs) {
+const LDX = function(memory, registers, inputs, outputs) {    
+    let MRX = memory[registers.R[registers.X]];
+    if(registers.N & 0x08) MRX = memory[registers.R[registers.P]];
+    
     const results = [
-        
+        [MRX, false],
+        [MRX | registers.D, false],
+        [MRX & registers.D, false],
+        [MRX ^ registers.D, false],
+        [MRX + registers.D, true],
+        [MRX - registers.D, true],
+        [(registers.N & 0x08) ? registers.D << 1 : registers.D >> 1 , true],
+        [registers.D - MRX, true]
     ];
+    
+    if(results[registers.N][1]) {
+        if(registers.N === 0x04 || registers.N === 0x0C || registers.N === 0x0E) {
+            registers.DF = (results[registers.N][0] & 0x100) ? 1 : 0;
+        }
+        if(registers.N === 0x05 || registers.N === 0x07 || registers.N === 0x0D || registers.N === 0x0F) {
+            registers.DF = (results[registers.N][0] & 0x100) ? 0 : 1;
+        }
+        if(registers.N === 0x06) {
+            registers.DF = (registers.D & 0x01) ? 1 : 0;
+        }
+    }
+    
+    registers.D = results[registers.N][0] & 0xFF;
+    if(registers.N & 0x80) registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
+    return 0;
 };
 
 const instructions = [
     [ IDL, LDN, LDN,  LDN,  LDN, LDN, LDN,  LDN, LDN, LDN,  LDN, LDN, LDN,  LDN,  LDN,  LDN  ], //Group 0
     [ INC, INC, INC,  INC,  INC, INC, INC,  INC, INC, INC,  INC, INC, INC,  INC,  INC,  INC  ], //Group 1
     [ DEC, DEC, DEC,  DEC,  DEC, DEC, DEC,  DEC, DEC, DEC,  DEC, DEC, DEC,  DEC,  DEC,  DEC  ], //Group 2
-    [ BR,  BQ,  BZ,   BDF,  B1,  B2,  B3,   B4,  NBR, BNQ,  BNZ, BNF, BN1,  BN2,  BN3,  BN4  ], //Group 3
+    [ BR,  BR,  BR,   BR,   BR,  BR,  BR,   BR,  BR,  BR,   BR,  BR,  BR,   BR,   BR,   BR   ], //Group 3
     [ LDA, LDA, LDA,  LDA,  LDA, LDA, LDA,  LDA, LDA, LDA,  LDA, LDA, LDA,  LDA,  LDA,  LDA  ], //Group 4
     [ STR, STR, STR,  STR,  STR, STR, STR,  STR, STR, STR,  STR, STR, STR,  STR,  STR,  STR  ], //Group 5
     [ IRX, OUT, OUT,  OUT,  OUT, OUT, OUT,  OUT, INP, INP,  INP, INP, INP,  INP,  INP,  INP  ], //Group 6
@@ -381,9 +296,9 @@ const instructions = [
     [ PLO, PLO, PLO,  PLO,  PLO, PLO, PLO,  PLO, PLO, PLO,  PLO, PLO, PLO,  PLO,  PLO,  PLO  ], //Group A
     [ PLO, PLO, PLO,  PLO,  PLO, PLO, PLO,  PLO, PLO, PLO,  PLO, PLO, PLO,  PLO,  PLO,  PLO  ], //Group B
     [ LBR, LBR, LBR,  LBR,  LBR, LBR, LBR,  LBR, LBR, LBR,  LBR, LBR, LBR,  LBR,  LBR,  LBR  ], //Group C
-    [ SEP, SEP, SEP,  SEP,  SEP, SEP, SEP,  SEP, SEP, SEP,  SEP, SEP, SEP,  SEP,  SEP,  SEP  ], //Gtoup D
-    [ SEP, SEP, SEP,  SEP,  SEP, SEP, SEP,  SEP, SEP, SEP,  SEP, SEP, SEP,  SEP,  SEP,  SEP  ], //Gtoup E
-    
+    [ SEP, SEP, SEP,  SEP,  SEP, SEP, SEP,  SEP, SEP, SEP,  SEP, SEP, SEP,  SEP,  SEP,  SEP  ], //Group D
+    [ SEP, SEP, SEP,  SEP,  SEP, SEP, SEP,  SEP, SEP, SEP,  SEP, SEP, SEP,  SEP,  SEP,  SEP  ], //Group E
+    [ LDX, LDX, LDX,  LDX,  LDX, LDX, LDX,  LDX, LDX, LDX,  LDX, LDX, LDX,  LDX,  LDX,  LDX  ]  //Group F
 ];
 
 const executeInstruction = function(memory, registers, inputs, outputs, init) {
