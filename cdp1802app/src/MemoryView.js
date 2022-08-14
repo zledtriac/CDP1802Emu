@@ -52,6 +52,11 @@ export default function MemoryView(props) {
             
             let real_address = (y * 16) + x;
             
+            if(real_address === props.dp) {
+                new_sx["backgroundColor"] = "#999900";
+                new_sx["color"] = "#fff";
+            }
+            
             if(real_address === props.pc) {
                 new_sx["backgroundColor"] = "#009900";
                 new_sx["color"] = "#fff";

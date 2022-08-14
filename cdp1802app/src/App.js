@@ -71,7 +71,7 @@ function App() {
                 </Grid>
                 <Grid item xs={3} >
                     <Stack spacing={1} >
-                        <MemoryView mem={memory} pc={registers.R[registers.P]} upd={changer} />
+                        <MemoryView mem={memory} pc={registers.R[registers.P]} dp={registers.R[registers.X]} upd={changer} />
                         <Stack direction="row" spacing={1} >
                             <Button variant="contained" color="error" onClick={onResetButton} >RESET</Button>
                             <Button variant="contained" color="success" onClick={onNextCycleButton} >NEXT CYCLE</Button>

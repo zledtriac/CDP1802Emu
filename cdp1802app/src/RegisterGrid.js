@@ -15,7 +15,12 @@ export default function RegisterGrid(props) {
     ];
     
     for(let i = 0; i < props.regs.R.length; i++) {
-        blocks.push(<RegisterBlock key={`reg${i}`} name={`R${i}`} value={props.regs.R[i]} bits={16} size={4} />)
+        let new_sx = {};
+        
+        if(props.regs.X === i) new_sx["backgroundColor"] = "#777700";
+        if(props.regs.P === i) new_sx["backgroundColor"] = "#007700";
+        
+        blocks.push(<RegisterBlock sx={new_sx} key={`reg${i}`} name={`R${i}`} value={props.regs.R[i]} bits={16} size={4} />)
     }
     
     return (
@@ -26,8 +31,8 @@ export default function RegisterGrid(props) {
             <RegisterBlock key="regI" name="I" value={props.regs.I} bits={4} size={2} />
             <RegisterBlock key="regN" name="N" value={props.regs.N} bits={4} size={2} />
             <RegisterBlock key="regT" name="T" value={props.regs.T} bits={8} size={4} />
-            <RegisterBlock key="regP" name="P" value={props.regs.P} bits={4} size={2} />
-            <RegisterBlock key="regX" name="X" value={props.regs.X} bits={4} size={2} />
+            <RegisterBlock key="regP" name="P" sx={{ backgroundColor: "#007700" }} value={props.regs.P} bits={4} size={2} />
+            <RegisterBlock key="regX" name="X" sx={{ backgroundColor: "#777700" }} value={props.regs.X} bits={4} size={2} />
             <RegisterBlock key="regS" name="S" value={props.regs.S} bits={2} size={1} />
             <RegisterBlock key="regDF" name="DF" value={props.regs.DF} bits={1} size={1} />
             <RegisterBlock key="regIE" name="IE" value={props.regs.IE} bits={1} size={1} />
@@ -40,7 +45,7 @@ export default function RegisterGrid(props) {
 function RegisterBlock(props) {
     return (
         <Grid item xs={props.size}>
-            <Item>
+            <Item sx={props.sx}>
                 <div>{props.name}</div>
                 <div>{props.value.toString(2).padStart(props.bits, "0")}</div>
             </Item>
