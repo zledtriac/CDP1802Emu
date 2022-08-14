@@ -231,6 +231,7 @@ const LBR = function(memory, registers, inputs, outputs) {
 
     if(conditions[registers.N][0]) {
         registers.R[registers.P] = ((registers.B << 8) | memory[registers.R[registers.P]]) & 0xFFFF;
+        input_data_cnt = 0;
         return 0;
     }
     if(conditions[registers.N][1]) registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
