@@ -1,5 +1,5 @@
 # CDP1802Emu
-This is a CDP1802 cpu emulator created with React an MUI. This project was made for training and educational purposes. The emulator only have 256 bytes of memory, enough to demonstrate loops, branches, and small programs. It's still in a developments stage, but it's working.
+This is a CDP1802 cpu emulator created with React and MUI. This project was made for training and educational purposes. The emulator only have 256 bytes of memory, enough to demonstrate loops, branches, and small programs. It's still in a development stage, but it's working.
 
 Currently it doesn't have any compiler built into it, so it can only run compiled binary files. A compiler can be found on the https://www.retrotechnology.com/ what can be used to compile Assembly codes: https://www.retrotechnology.com/memship/a18.html
 
@@ -19,6 +19,9 @@ npm start
 On the left you can see the register blocks and on the middle you can see the a memory. Under the memory view, you can see the control buttons.\
 Function of the buttons:
 - **RESET:** It will resets the cpu to the init state (S1).
+- **RUN:** It will start to stepping through the cycles automatically with a 500 milliseconds interval.
+- **STOP:** It will stop the automatic stepping.
+- **STEP:** It will step one full instruction.
 - **NEXT CYCLE:** It will execute the current state, and goes to the next state.
 - **OPEN FILE:** It will open up an open file dialog, you can load a compiled binary file.
 
