@@ -1,0 +1,40 @@
+   0004                 R4      EQU 4
+   0005                 R5      EQU 5
+                        
+   0000                     org 00h
+   0000                 START
+   0000   71                dis
+   0001   00                idl
+                            
+   0002   f8 16             ldi EXSTRING.0
+   0004   a4                plo R4
+   0005   f8 00             ldi EXSTRING.1
+   0007   b4                phi R4
+                            
+   0008   f8 c0             ldi 0C0h
+   000a   a5                plo R5
+   000b   f8 00             ldi 00h
+   000d   b5                phi R5
+                            
+   000e   e4                SEX R4
+                        
+   000f                 PUTCHR
+   000f   72                ldxa
+   0010   55                str R5
+   0011   15                inc R5
+   0012   3a 0f             bnz PUTCHR
+                            
+   0014                 ENDLOOP
+   0014   30 14             br ENDLOOP
+                        
+   0016                 EXSTRING  
+   0016   54 68 69 73       db "This is a string.", 0
+   001a   20 69 73 20   
+   001e   61 20 73 74   
+   0022   72 69 6e 67   
+   0026   2e 00         
+                        
+   0028                     END
+0014  ENDLOOP       0016  EXSTRING      000f  PUTCHR        0004  R4        
+0005  R5            0000  START         
+
