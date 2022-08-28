@@ -27,3 +27,6 @@ Function of the buttons:
 - **OPEN FILE:** It will open up an open file dialog, you can load a compiled binary file.
 
 The program counter and its position is highlighted with green, and the data pointer and its position is highlighted with yellow color.
+
+## Examples
+You can find some examples in the "examples" folder, just open the .bin files and press **RUN** or step through the program manually with the **STEP** or the **NEXT CYCLE** button.
