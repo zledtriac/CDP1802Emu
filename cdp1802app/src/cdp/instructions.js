@@ -240,12 +240,12 @@ const LBR = function(memory, registers, inputs, outputs) {
 };
 
 const SEP = function(memory, registers, inputs, outputs) {
-    if(registers.I && 0x01) {
-        registers.X = registers.N;
+    if(registers.I & 0x01) {
+        registers.P = registers.N;
         return 0;
     }
     
-    registers.P = registers.N;
+    registers.X = registers.N;
     return 0;
 };
 
