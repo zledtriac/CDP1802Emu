@@ -72,8 +72,12 @@ function App() {
     }
     
     function onStep() {
+        let cnt = 5;
         cdp.nextCycle();
-        while(registers.S > 0) cdp.nextCycle();
+        while(registers.S > 0 && cnt) {
+            cdp.nextCycle();
+            cnt--;
+        }
         forceUpdate();
     }
 

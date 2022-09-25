@@ -277,7 +277,7 @@ const LDX = function(memory, registers, inputs, outputs) {
     }
     
     registers.D = results[registers.N & 0x07][0] & 0xFF;
-    if(registers.N & 0x08) registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
+    if(registers.N & 0x08 && registers.N !== 0x0E) registers.R[registers.P] = (registers.R[registers.P] + 1) & 0xFFFF;
     return 0;
 };
 
