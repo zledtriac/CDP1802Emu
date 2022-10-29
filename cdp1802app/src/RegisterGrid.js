@@ -37,8 +37,8 @@ export default function RegisterGrid(props) {
             <RegisterBlock key="regDF" name="DF" value={props.regs.DF} bits={1} size={1} />
             <RegisterBlock key="regIE" name="IE" value={props.regs.IE} bits={1} size={1} />
             <RegisterBlock key="regQ" name="Q" value={props.regs.Q} bits={1} size={1} />
-            <RegisterBlock key="IN1" name="IN 1" value={props.regs.IE} bits={8} size={1} />
-            <RegisterBlock key="OUT1" name="OUT 1" value={props.regs.Q} bits={8} size={1} />
+            <RegisterBlock key="IN1" name="IN 1" value={props.regs.IN1} bits={8} size={1} />
+            <RegisterBlock key="OUT1" name="OUT 1" value={props.regs.OUT1} bits={8} size={1} />
             <TextBlock key="StateText" text={state_strings[props.regs.S]} size={8} />
         </Grid>
     );
