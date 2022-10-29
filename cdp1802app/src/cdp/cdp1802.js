@@ -13,7 +13,9 @@ let registers = {
     T: 0,
     IE: 1,
     Q: 0,
-    S: 1
+    S: 1,
+    IN1: 0,
+    OUT1: 0
 };
 
 let inputs = {
