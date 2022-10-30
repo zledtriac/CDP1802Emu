@@ -26,6 +26,9 @@ Function of the buttons:
 - **NEXT CYCLE:** It will execute the current state, and goes to the next state.
 - **OPEN FILE:** It will open up an open file dialog, you can load a compiled binary file.
 - **CDP1802/5/6** It switches between CDP1802 and CDP1805/6 instruction set
+- **INTERRUPT** Emulates the interrupt pin being triggered
+- **DMA IN** Emulates the DMA IN pin being triggered
+- **DMA OUT** Emulates DMA OUT pin being triggered
 
 The program counter and its position is highlighted with green, and the data pointer and its position is highlighted with yellow color.
 
