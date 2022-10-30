@@ -16,7 +16,8 @@ After the package installation finished. To start the development mode, run "npm
 npm start
 ```
 ## Usage
-![UI](/img/screenshot.jpg)
+![UI]![image](https://user-images.githubusercontent.com/43314815/198876849-628eafe1-5750-4d2c-870a-7e4c5a18bb6a.png)
+
 On the left you can see the register blocks and on the middle you can see the a memory. Under the memory view, you can see the control buttons.\
 Function of the buttons:
 - **RESET:** It will resets the cpu to the init state (S1).
