@@ -8,8 +8,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from "@mui/material/TextField"
-
-
+import {useRef} from 'react';
+import {useState} from 'react';
 import RegisterGrid from './RegisterGrid';
 import MemoryView from './MemoryView';
 let delay = 0;
@@ -41,7 +41,7 @@ function App() {
             timer = setTimeout(function() {
                 cdp.nextCycle();
                 setChanger(!changer);
-            }, delay);
+            }, Delay);
         }
         
         return () => clearTimeout(timer);
@@ -90,6 +90,23 @@ function App() {
         forceUpdate();
     }
 
+  const [Delay, SetDelay] = useState('');
+
+const handleChange = event => {
+    SetDelay(event.target.value);
+
+    console.log('value is:', event.target.value);
+  };
+
+const inputRef = useRef(null);
+
+  function CDPclick() {
+	  
+	  cdp.regs.CDP = 1;
+    console.log(inputRef.current.value);
+	
+  }
+  
     function onChange(e) {
         let freader = new FileReader();
         freader.onloadend = function(data) {
@@ -119,11 +136,11 @@ function App() {
                                 <Button variant="contained" color="success" onClick={onStep} disabled={runState}>STEP</Button>
                                 <Button variant="contained" color="success" onClick={onNextCycleButton} disabled={runState}>NEXT CYCLE</Button>
                                 <Button variant="contained" onClick={onLoadButton} disabled={runState}>OPEN FILE</Button>
-								<Button variant="contained" color="success" onClick={CDP180256}>CDP1802/5/6</Button>
+								<Button variant="contained" color="success" onClick={CDPclick}>CDP1802/5/6</Button>
 								<Button variant="contained" color="success" onClick={onStop} disabled={!runState}>INTERRUPT(WIP)</Button>
 								<Button variant="contained" color="success" onClick={onStop} disabled={!runState}>DMA IN(WIP)</Button>
 								<Button variant="contained" color="success" onClick={onStop} disabled={!runState}>DMA OUT(WIP)</Button>
-								<TextField id="delay" label="Delay in ms" variant="filled" />
+								<TextField id="delay" label="Delay in ms" variant="filled" value={Delay} onChange={handleChange} />
                                 <input type='file' id='file' ref={inputFile} style={{display: 'none'}} onChange={onChange} />
                             </Stack>
                         </Stack>

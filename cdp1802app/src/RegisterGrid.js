@@ -4,8 +4,8 @@ import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import TextField from "@mui/material/TextField"
-
+import TextField from "@mui/material/TextField";
+import {useState} from 'react';
 export default function RegisterGrid(props) {
     
     let blocks = [];
@@ -15,6 +15,17 @@ export default function RegisterGrid(props) {
         "DMA",
         "INTERRUPT"
     ];
+	
+	
+	const [IN1, setIN1] = useState('');
+
+  const IN1Handler = event => {
+  setIN1(event.target.value);};
+	
+	const [IN2, setIN2] = useState('');
+
+  const IN2Handler = event => {
+  setIN2(event.target.value);};
     
     for(let i = 0; i < props.regs.R.length; i++) {
         let new_sx = {};
@@ -39,9 +50,9 @@ export default function RegisterGrid(props) {
             <RegisterBlock key="regDF" name="DF" value={props.regs.DF} bits={1} size={1} />
             <RegisterBlock key="regIE" name="IE" value={props.regs.IE} bits={1} size={1} />
             <RegisterBlock key="regQ" name="Q" value={props.regs.Q} bits={1} size={1} />
-            <TextField id="IN" label="IN 1(HEX)" variant="filled" />
+            <TextField id="IN" label="IN 1(HEX)" variant="filled" value={IN1} onChange={IN1Handler} />
             <RegisterBlock key="OUT" name="OUT 1" value={props.regs.OUT[1]} bits={8} size={4} />
-			<TextField id="IN2" label="IN 2(HEX)" variant="filled" />
+			<TextField id="IN2" label="IN 2(HEX)" variant="filled" value={IN2} onChange={IN2Handler} />
             <RegisterBlock key="OUT2" name="OUT 2" value={props.regs.OUT[2]} bits={8} size={4} />
 	
 			<RegisterBlock key="N0" name="N0" value={props.regs.N0} bits={1} size={1} />

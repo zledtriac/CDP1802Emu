@@ -9,7 +9,7 @@ const LDN = function(memory, registers, inputs, outputs) {
     registers.D = memory[registers.R[registers.N]];
     return 0;
 };
-
+3
 const INC = function(memory, registers, inputs, outputs) {
     registers.R[registers.N] = (registers.R[registers.N] + 1) & 0xFFFF;
     return 0;
