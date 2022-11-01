@@ -7,9 +7,12 @@ import Grid from '@mui/material/Grid';
 import CssBaseline from '@mui/material/CssBaseline';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+import TextField from "@mui/material/TextField"
+
 
 import RegisterGrid from './RegisterGrid';
 import MemoryView from './MemoryView';
+let delay = 0;
 
 const cdp = require("./cdp/cdp1802");
 
@@ -38,7 +41,7 @@ function App() {
             timer = setTimeout(function() {
                 cdp.nextCycle();
                 setChanger(!changer);
-            }, 500);
+            }, delay);
         }
         
         return () => clearTimeout(timer);
@@ -69,6 +72,12 @@ function App() {
 
     function onRun() {
         setRunState(true);
+    }
+	
+	function CDP180256() {
+        //inputFile.current.click();
+		cdp.registers.CDP = 1;
+		//cdp.CDPSWITCH();
     }
     
     function onStep() {
@@ -110,6 +119,11 @@ function App() {
                                 <Button variant="contained" color="success" onClick={onStep} disabled={runState}>STEP</Button>
                                 <Button variant="contained" color="success" onClick={onNextCycleButton} disabled={runState}>NEXT CYCLE</Button>
                                 <Button variant="contained" onClick={onLoadButton} disabled={runState}>OPEN FILE</Button>
+								<Button variant="contained" color="success" onClick={CDP180256}>CDP1802/5/6</Button>
+								<Button variant="contained" color="success" onClick={onStop} disabled={!runState}>INTERRUPT(WIP)</Button>
+								<Button variant="contained" color="success" onClick={onStop} disabled={!runState}>DMA IN(WIP)</Button>
+								<Button variant="contained" color="success" onClick={onStop} disabled={!runState}>DMA OUT(WIP)</Button>
+								<TextField id="delay" label="Delay in ms" variant="filled" />
                                 <input type='file' id='file' ref={inputFile} style={{display: 'none'}} onChange={onChange} />
                             </Stack>
                         </Stack>

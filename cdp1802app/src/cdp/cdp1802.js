@@ -14,8 +14,14 @@ let registers = {
     IE: 1,
     Q: 0,
     S: 1,
-    IN1: 0,
-    OUT1: 0
+    IN: Array(8).fill(0),
+	OUT: Array(8).fill(0),
+
+	N0: 0,
+	N1: 0,
+	N2: 0,
+	CDP: 0
+	
 };
 
 let inputs = {
@@ -62,6 +68,11 @@ const resetCpu = function() {
     cpu_init = true;
 };
 
+function CDPSWITCH(){
+	
+	registers.CDP = 1;
+};
+
 const nextCycle = function() {
     
     if(registers.S === 0) {
@@ -69,12 +80,20 @@ const nextCycle = function() {
         registers.N = (memory[registers.R[registers.P]] & 0x0F);
         registers.R[registers.P]++;
         registers.S++;
+		//registers.OUT[registers.N] = outputs.BUS;
+	//	if(registers.I === 6 && registers.N > 0 && registers.N < 8) {
+  //registers.OUT[registers.N] = outputs.BUS;
+//}
         return;
     }
     
     if(registers.S === 1) {
         inst.executeInstruction(memory, registers, inputs, outputs, cpu_init);
         cpu_init = false;
+		
+		if(registers.I === 6 && registers.N > 0 && registers.N < 8) {
+  registers.OUT[registers.N] = outputs.BUS;
+}
         return;
     }
     

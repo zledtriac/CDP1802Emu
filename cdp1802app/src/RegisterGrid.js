@@ -3,6 +3,8 @@ import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import TextField from "@mui/material/TextField"
 
 export default function RegisterGrid(props) {
     
@@ -37,8 +39,15 @@ export default function RegisterGrid(props) {
             <RegisterBlock key="regDF" name="DF" value={props.regs.DF} bits={1} size={1} />
             <RegisterBlock key="regIE" name="IE" value={props.regs.IE} bits={1} size={1} />
             <RegisterBlock key="regQ" name="Q" value={props.regs.Q} bits={1} size={1} />
-            <RegisterBlock key="IN1" name="IN 1" value={props.regs.IN1} bits={8} size={1} />
-            <RegisterBlock key="OUT1" name="OUT 1" value={props.regs.OUT1} bits={8} size={1} />
+            <TextField id="IN" label="IN 1(HEX)" variant="filled" />
+            <RegisterBlock key="OUT" name="OUT 1" value={props.regs.OUT[1]} bits={8} size={4} />
+			<TextField id="IN2" label="IN 2(HEX)" variant="filled" />
+            <RegisterBlock key="OUT2" name="OUT 2" value={props.regs.OUT[2]} bits={8} size={4} />
+	
+			<RegisterBlock key="N0" name="N0" value={props.regs.N0} bits={1} size={1} />
+			<RegisterBlock key="N1" name="N1" value={props.regs.N1} bits={1} size={1} />
+            <RegisterBlock key="N2" name="N2" value={props.regs.N2} bits={1} size={1} />
+			<RegisterBlock key="CDP" name="CDP1802/5/6" value={props.regs.CDP} bits={1} size={2} />
             <TextBlock key="StateText" text={state_strings[props.regs.S]} size={8} />
         </Grid>
     );
@@ -54,6 +63,10 @@ function RegisterBlock(props) {
         </Grid>
     );
 }
+
+
+
+
 
 function TextBlock(props) {
     return (
