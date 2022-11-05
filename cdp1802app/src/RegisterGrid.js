@@ -6,6 +6,8 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import TextField from "@mui/material/TextField";
 import {useState} from 'react';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 export default function RegisterGrid(props) {
     
     let blocks = [];
@@ -68,9 +70,12 @@ export default function RegisterGrid(props) {
             <RegisterBlock key="OUT3" name="OUT 3" value={props.regs.OUT[3]} bits={8} size={4} />
 			<TextField id="IN4" label="IN 4(HEX)" variant="filled" value={IN4} onChange={IN4Handler} />
             <RegisterBlock key="OUT4" name="OUT 4" value={props.regs.OUT[4]} bits={8} size={4} />
-
+			
 			<RegisterBlock key="CDP" name="CDP1802/5/6" value={props.regs.CDP} bits={1} size={2} />
             <TextBlock key="StateText" text={state_strings[props.regs.S]} size={8} />
+			
+			
+			
         </Grid>
     );
 }
