@@ -24,8 +24,18 @@ export default function RegisterGrid(props) {
 	
 	const [IN2, setIN2] = useState('');
 
-  const IN2Handler = event => {
+  const IN3Handler = event => {
   setIN2(event.target.value);};
+  
+  const [IN3, setIN3] = useState('');
+
+  const IN2Handler = event => {
+  setIN3(event.target.value);};
+  
+  const [IN4, setIN4] = useState('');
+
+  const IN4Handler = event => {
+  setIN4(event.target.value);};
     
     for(let i = 0; i < props.regs.R.length; i++) {
         let new_sx = {};
@@ -54,10 +64,11 @@ export default function RegisterGrid(props) {
             <RegisterBlock key="OUT" name="OUT 1" value={props.regs.OUT[1]} bits={8} size={4} />
 			<TextField id="IN2" label="IN 2(HEX)" variant="filled" value={IN2} onChange={IN2Handler} />
             <RegisterBlock key="OUT2" name="OUT 2" value={props.regs.OUT[2]} bits={8} size={4} />
-	
-			<RegisterBlock key="N0" name="N0" value={props.regs.N0} bits={1} size={1} />
-			<RegisterBlock key="N1" name="N1" value={props.regs.N1} bits={1} size={1} />
-            <RegisterBlock key="N2" name="N2" value={props.regs.N2} bits={1} size={1} />
+			<TextField id="IN3" label="IN 3(HEX)" variant="filled" value={IN3} onChange={IN3Handler} />
+            <RegisterBlock key="OUT3" name="OUT 3" value={props.regs.OUT[3]} bits={8} size={4} />
+			<TextField id="IN4" label="IN 4(HEX)" variant="filled" value={IN4} onChange={IN4Handler} />
+            <RegisterBlock key="OUT4" name="OUT 4" value={props.regs.OUT[4]} bits={8} size={4} />
+
 			<RegisterBlock key="CDP" name="CDP1802/5/6" value={props.regs.CDP} bits={1} size={2} />
             <TextBlock key="StateText" text={state_strings[props.regs.S]} size={8} />
         </Grid>

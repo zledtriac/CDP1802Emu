@@ -65,6 +65,9 @@ const resetCpu = function() {
     registers.P = 0;
     registers.IE = 1;
     registers.S = 1;
+	registers.OUT = Array(8).fill(0);
+	registers.IN = Array(8).fill(0);
+	
     cpu_init = true;
 };
 
