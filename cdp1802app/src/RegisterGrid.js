@@ -8,8 +8,17 @@ import TextField from "@mui/material/TextField";
 import {useState} from 'react';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
+import AlertTitle from '@mui/material/AlertTitle';
+import IconButton from '@mui/material/IconButton';
+import Collapse from '@mui/material/Collapse';
+
+import CloseIcon from '@mui/icons-material/Close';
+
+var hexToBinary = require('hex-to-binary');
 export default function RegisterGrid(props) {
     
+
+	
     let blocks = [];
     let state_strings = [
         "FETCH",
@@ -19,19 +28,22 @@ export default function RegisterGrid(props) {
     ];
 	
 	
-	const [IN1, setIN1] = useState('');
+	
+	const [IN1, setIN1] = useState(''); //first is the data holding var, second one is used by (event.target.value)
+	const IN1Handler = event => {
+    setIN1(event.target.value);
 
-  const IN1Handler = event => {
-  setIN1(event.target.value);};
+    console.log('value is:', event.target.value);
+  };
 	
 	const [IN2, setIN2] = useState('');
 
-  const IN3Handler = event => {
+  const IN2Handler = event => {
   setIN2(event.target.value);};
   
   const [IN3, setIN3] = useState('');
 
-  const IN2Handler = event => {
+  const IN3Handler = event => {
   setIN3(event.target.value);};
   
   const [IN4, setIN4] = useState('');
@@ -39,6 +51,67 @@ export default function RegisterGrid(props) {
   const IN4Handler = event => {
   setIN4(event.target.value);};
     
+	
+	let lastsuceffulIN1 = 0;
+	let lastsuceffulIN2 = 0;
+	let lastsuceffulIN3 = 0;
+	let lastsuceffulIN4 = 0;
+	
+
+	if(IN1 >= 0){
+		
+		
+		props.regs.IN[1] = hexToBinary(IN1);
+
+		
+              
+
+	
+		
+	} 
+	
+	if(IN2 >= 0){
+		
+		
+		props.regs.IN[2] = hexToBinary(IN2);
+
+		
+              
+
+	
+		
+	}
+	
+	if(IN3 >= 0){
+		
+		
+		props.regs.IN[3] = hexToBinary(IN3);
+
+		
+              
+
+	
+		
+	}
+	
+	if(IN4 >= 0){
+		
+		
+		props.regs.IN[4] = hexToBinary(IN4);
+
+		
+              
+
+	
+		
+	}
+	
+	
+
+	
+
+	
+	
     for(let i = 0; i < props.regs.R.length; i++) {
         let new_sx = {};
         
@@ -62,23 +135,38 @@ export default function RegisterGrid(props) {
             <RegisterBlock key="regDF" name="DF" value={props.regs.DF} bits={1} size={1} />
             <RegisterBlock key="regIE" name="IE" value={props.regs.IE} bits={1} size={1} />
             <RegisterBlock key="regQ" name="Q" value={props.regs.Q} bits={1} size={1} />
-            <TextField id="IN" label="IN 1(HEX)" variant="filled" value={IN1} onChange={IN1Handler} />
+            <TextField id="IN" label="IN 1(HEX)" variant="filled" value={IN1} inputProps={{ maxLength: 2 }} onChange={IN1Handler} />
+			
+			
             <RegisterBlock key="OUT" name="OUT 1" value={props.regs.OUT[1]} bits={8} size={4} />
-			<TextField id="IN2" label="IN 2(HEX)" variant="filled" value={IN2} onChange={IN2Handler} />
+			
+			<TextField id="IN2" label="IN 2(HEX)" variant="filled" value={IN2} inputProps={{ maxLength: 2 }} onChange={IN2Handler} />
+			
+			
             <RegisterBlock key="OUT2" name="OUT 2" value={props.regs.OUT[2]} bits={8} size={4} />
-			<TextField id="IN3" label="IN 3(HEX)" variant="filled" value={IN3} onChange={IN3Handler} />
+			
+			<TextField id="IN3" label="IN 3(HEX)" variant="filled" value={IN3} inputProps={{ maxLength: 2 }} onChange={IN3Handler} />
+			
             <RegisterBlock key="OUT3" name="OUT 3" value={props.regs.OUT[3]} bits={8} size={4} />
-			<TextField id="IN4" label="IN 4(HEX)" variant="filled" value={IN4} onChange={IN4Handler} />
+			
+			<TextField id="IN4" label="IN 4(HEX)" variant="filled" value={IN4} inputProps={{ maxLength: 2 }} onChange={IN4Handler} />
+			
             <RegisterBlock key="OUT4" name="OUT 4" value={props.regs.OUT[4]} bits={8} size={4} />
 			
 			<RegisterBlock key="CDP" name="CDP1802/5/6" value={props.regs.CDP} bits={1} size={2} />
             <TextBlock key="StateText" text={state_strings[props.regs.S]} size={8} />
+
+			</Grid>
 			
 			
-			
-        </Grid>
+        
     );
+	
+
 }
+
+
+
 
 function RegisterBlock(props) {
     return (

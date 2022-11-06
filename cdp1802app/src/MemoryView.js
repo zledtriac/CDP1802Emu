@@ -19,6 +19,11 @@ import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
+import TextField from '@mui/material/TextField';
+import {useRef} from 'react';
+import {useState} from 'react';
+
+  const RAMSYSTEM = require("./RAMSYSTEM");
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -91,6 +96,8 @@ export default function MemoryView(props) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  
+
     
     for(let i = 0; i<16; i++) {
         hex_columns.push(<StyledTableCell align="center" key={`headNum${i}`} >{i.toString(16).toUpperCase()}</StyledTableCell>);
@@ -134,6 +141,13 @@ export default function MemoryView(props) {
         );
     }
     
+	const [Ram, setRam] = useState(''); //first is the data holding var, second one is used by (event.target.value)
+	const RamhandleChange = event => {
+    setRam(event.target.value);
+
+    console.log('value is:', event.target.value);
+  };
+	
     return (
         <Box>
 		<Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
@@ -180,9 +194,29 @@ export default function MemoryView(props) {
           All good!!
         </Alert>
       </Collapse>
-	
+		
+		
 
 		</TabPanel>
+		
+		<TabPanel value={value} index={1}>
+		
+		<stack>
+		
+		Memory Control
+		<div>
+		<TextField id="RAM START ADRESS" label="RAM START ADRESS" variant="filled" />
+		<div>
+		<TextField id="ROM MAX ADRESS" label="ROM MAX ADRESS" variant="filled" value={Ram} onChange={RamhandleChange} />
+		</div>
+		
+		<script src="RAMSYSTEM.CircularIndeterminate()">
+		
+		</script>
+		</div>
+		</stack>
+		</TabPanel>
+		
         </Box>
     );
 }
