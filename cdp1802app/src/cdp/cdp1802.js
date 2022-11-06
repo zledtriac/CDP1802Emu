@@ -1,4 +1,4 @@
-
+//import ROM from "C:/Users/utilizador/Documents/GitHub/CDP1802Emu/cdp1802app/src/MemoryView.js";
 const inst = require("./instructions");
 
 let registers = {
@@ -35,7 +35,10 @@ let outputs = {
     BUS: 0
 };
 
-let memory = Array(512).fill(0xFF);
+let memory = Array(2048).fill(0xFF);
+let RAM = Array(256).fill(0xFF);
+let DMA_IN = Array(512).fill(0xFF);
+let DMA_OUT = Array(512).fill(0xFF);
 
 let cpu_init = true;
 
@@ -118,5 +121,7 @@ module.exports = {
     getMemory: getMemory,
     loadMemory: loadMemory,
     resetCpu: resetCpu,
-    nextCycle: nextCycle
+    nextCycle: nextCycle,
+	memory: memory,
+	CDPRAM:RAM
 };

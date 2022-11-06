@@ -26,13 +26,22 @@ import Switch from '@mui/material/Switch';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import RAMSYSTEM from "./RAMSYSTEM.js";
+const cdp = require("./cdp/cdp1802.js")
 
   export const checkedIN = checkedIN2;
+  
+  
   var checkedIN2 = "disabled";
   //const RAMSYSTEM = require("./RAMSYSTEM");
   let ErrorSeverity = "success";
   let ErrorInfo = "success";
-
+	
+	
+	function YSize(ROM) {
+		
+		return(parseInt(ROM,10)/16);
+		
+	}
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -113,7 +122,7 @@ export default function MemoryView(props) {
         hex_columns.push(<StyledTableCell align="center" key={`headNum${i}`} >{i.toString(16).toUpperCase()}</StyledTableCell>);
     }
     
-    for(let y = 0; y < 32; y++) {
+    for(let y = 0; y < 128; y++) {
         let line = [];
         let end_string = "";
         
@@ -190,6 +199,8 @@ export default function MemoryView(props) {
     console.log('value is:', event.target.value);
   };
   
+   
+  
   const [ROM, setROM] = useState(''); //first is the data holding var, second one is used by (event.target.value)
 	const ROMhandleChange = event => {
     setROM(event.target.value);
@@ -224,6 +235,8 @@ export default function MemoryView(props) {
 	 };
 	 
 	 let totalmem = parseInt(ROM,10) + parseInt(Ram,10);
+	 
+	 //cdp.memory = Array(parseInt(ROM,10)).fill(0xFF);
 	 
 	 if(totalmem > 65000){
   
@@ -299,11 +312,16 @@ export default function MemoryView(props) {
 		
 		Memory Control
 		<div>
-		<TextField id="RAM START ADRESS" label="RAM START ADRESS" variant="filled" value={Ram} onChange={RamhandleChange }type="number"/>
+		<TextField id="RAM START ADRESS" label="RAM START ADRESS" variant="filled" defaultValue={32767} value={Ram} onChange={RamhandleChange } type="number"/>
 		<div>
-		<TextField id="Rom end ADRESS" label="ROM END ADRESS" variant="filled" value={ROM} onChange={ROMhandleChange} type="number"/>
+		<TextField id="Rom end ADRESS" label="ROM END ADRESS" defaultValue="32767" variant="filled"  value={ROM} onChange={ROMhandleChange} type="number" />
 		</div>
-		total memory = {totalmem}
+		<div>
+		total memory = {totalmem} bytes
+		</div>
+		<div>
+		Memory left = {65535-totalmem} bytes
+		</div>
 		<script src="RAMSYSTEM.CircularIndeterminate()">
 		
 		</script>
@@ -337,6 +355,10 @@ export default function MemoryView(props) {
 }
 export {ErrorInfo};
 export {ErrorSeverity};
+
+
+
+
 export function TAG(popupseveraty,popupinfo) {
 	
 	
