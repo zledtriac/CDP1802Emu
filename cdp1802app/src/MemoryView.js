@@ -22,8 +22,18 @@ import CloseIcon from '@mui/icons-material/Close';
 import TextField from '@mui/material/TextField';
 import {useRef} from 'react';
 import {useState} from 'react';
+import Switch from '@mui/material/Switch';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import RAMSYSTEM from "./RAMSYSTEM.js";
 
-  const RAMSYSTEM = require("./RAMSYSTEM");
+  export const checkedIN = checkedIN2;
+  var checkedIN2 = "disabled";
+  //const RAMSYSTEM = require("./RAMSYSTEM");
+  let ErrorSeverity = "success";
+  let ErrorInfo = "success";
+
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -97,13 +107,13 @@ export default function MemoryView(props) {
     setValue(newValue);
   };
   
-
+	
     
     for(let i = 0; i<16; i++) {
         hex_columns.push(<StyledTableCell align="center" key={`headNum${i}`} >{i.toString(16).toUpperCase()}</StyledTableCell>);
     }
     
-    for(let y = 0; y < 16; y++) {
+    for(let y = 0; y < 32; y++) {
         let line = [];
         let end_string = "";
         
@@ -139,14 +149,117 @@ export default function MemoryView(props) {
                 <StyledTableCell key={`rowstr${y}`} >{end_string}</StyledTableCell>
             </StyledTableRow>
         );
-    }
-    
+    }  
+	
+	 
+	 var popupseveraty = "success";
+	 var popupinfo = "all good";
+	 
+	 if(popupinfo = "all good"){
+		 
+		 ErrorInfo = "All good";
+		 
+	 }
+	 
+	 if(popupseveraty = "success"){
+		 
+		 ErrorInfo = "All good";
+		 
+		 
+	 }
+	
+    const label = { inputProps: { 'aria-label': 'Switch demo' } };
 	const [Ram, setRam] = useState(''); //first is the data holding var, second one is used by (event.target.value)
 	const RamhandleChange = event => {
     setRam(event.target.value);
 
+
+
     console.log('value is:', event.target.value);
   };
+  
+  const [INSW, setINSW] = useState(''); //first is the data holding var, second one is used by (event.target.value)
+	const INSWhandleChange = event => {
+    setRam(event.target.value);
+	
+	
+	    
+
+
+
+    console.log('value is:', event.target.value);
+  };
+  
+  const [ROM, setROM] = useState(''); //first is the data holding var, second one is used by (event.target.value)
+	const ROMhandleChange = event => {
+    setROM(event.target.value);
+
+
+
+    console.log('value is:', event.target.value);
+  };
+  
+  
+  if(parseInt(Ram,10) <= 0){
+	  
+	  popupseveraty = "warning";
+		popupinfo = "RAM cant be 0 or bellow 0";
+	  ErrorSeverity = "error";
+	  ErrorInfo = "RAM cant be 0 or bellow 0";
+	  
+	  
+  }
+  
+  if(parseInt(ROM,10) > parseInt(Ram,10)){
+  
+  
+ 
+		 popupseveraty = "error";
+		popupinfo = "RAM START ADRESS CANT BE LOWER THAN ROM END ADRESS!!";
+		ErrorSeverity = "error";
+		ErrorInfo = "RAM START ADRESS CANT BE LOWER THAN ROM END ADRESS!!";
+		 
+	 
+		 
+	 };
+	 
+	 let totalmem = parseInt(ROM,10) + parseInt(Ram,10);
+	 
+	 if(totalmem > 65000){
+  
+  
+ 
+		 popupseveraty = "error";
+		popupinfo = "EXCEDED MEMORY LIMIT";
+		 ErrorSeverity = "error";
+		ErrorInfo = "EXCEDED MEMORY LIMIT";
+		 
+	 };
+	 
+	 if(parseInt(ROM,10) <= 0 ){
+  
+  
+ 
+		 popupseveraty = "error";
+		popupinfo = "ROM must be larger than 0!!";
+		 ErrorSeverity = "error";
+		 ErrorInfo = "ROM must be larger than 0!!";
+	 
+		 
+	 };
+	 
+	 
+	 const [hidden, setHidden] = useState(true);
+	
+	
+  const [checked, setChecked] = useState(false);
+  const switchHandler = (event) => {
+    setChecked(event.target.checked);
+  };
+  var checkedIN2 = checked;
+  
+
+
 	
     return (
         <Box>
@@ -155,6 +268,8 @@ export default function MemoryView(props) {
           <Tab label="RAM" {...a11yProps(1)} />
           <Tab label="DMA" {...a11yProps(3)} />
 		  <Tab label="SETTINGS" {...a11yProps(4)} />
+			  {checked ?<Tab label="IN1" {...a11yProps(5)} /> : null}
+			  {checked ?<Tab label="IN2" {...a11yProps(6)} /> : null}
         </Tabs>
 		<TabPanel value={value} index={0}>
         <TableContainer component={Paper} >
@@ -175,48 +290,58 @@ export default function MemoryView(props) {
 		
 		<TabPanel value={value} index={3}>
 		
-		<Collapse in={open}>
-        <Alert
-          action={
-            <IconButton
-              aria-label="close"
-              color="inherit"
-              size="small"
-              onClick={() => {
-                setOpen(false);
-              }}
-            >
-              <CloseIcon fontSize="inherit" />
-            </IconButton>
-          }
-          sx={{ mb: 2 }}
-        >
-          All good!!
-        </Alert>
-      </Collapse>
+		<Alert variant="outlined" severity={popupseveraty}>
+			{popupinfo}
+		</Alert>
 		
+		
+		<stack>
+		
+		Memory Control
+		<div>
+		<TextField id="RAM START ADRESS" label="RAM START ADRESS" variant="filled" value={Ram} onChange={RamhandleChange }type="number"/>
+		<div>
+		<TextField id="Rom end ADRESS" label="ROM END ADRESS" variant="filled" value={ROM} onChange={ROMhandleChange} type="number"/>
+		</div>
+		total memory = {totalmem}
+		<script src="RAMSYSTEM.CircularIndeterminate()">
+		
+		</script>
+		</div>
+		<div>
+		I/O Settings::
+		</div>
+		<div>
+		Manual input
+		<FormControlLabel control={<Switch defaultChecked />} label="Buffer" value={checked} onChange={switchHandler} />
+		</div>
+		
+		
+		</stack>
 		
 
 		</TabPanel>
 		
 		<TabPanel value={value} index={1}>
 		
-		<stack>
+		<RAMSYSTEM/>
 		
-		Memory Control
-		<div>
-		<TextField id="RAM START ADRESS" label="RAM START ADRESS" variant="filled" />
-		<div>
-		<TextField id="ROM MAX ADRESS" label="ROM MAX ADRESS" variant="filled" value={Ram} onChange={RamhandleChange} />
-		</div>
-		
-		<script src="RAMSYSTEM.CircularIndeterminate()">
-		
-		</script>
-		</div>
-		</stack>
 		</TabPanel>
 		
         </Box>
     );
+	
+	
+	
+
+}
+export {ErrorInfo};
+export {ErrorSeverity};
+export function TAG(popupseveraty,popupinfo) {
+	
+	
+	<Alert variant="outlined" severity={popupseveraty}>
+			{popupinfo}
+		</Alert>
+	
 }

@@ -35,7 +35,7 @@ let outputs = {
     BUS: 0
 };
 
-let memory = Array(256).fill(0xFF);
+let memory = Array(512).fill(0xFF);
 
 let cpu_init = true;
 

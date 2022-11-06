@@ -11,9 +11,12 @@ import Stack from '@mui/material/Stack';
 import AlertTitle from '@mui/material/AlertTitle';
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
+import {checkedIN} from "./MemoryView";
+
+
 
 import CloseIcon from '@mui/icons-material/Close';
-
+var memview = require('./MemoryView');
 var hexToBinary = require('hex-to-binary');
 export default function RegisterGrid(props) {
     
@@ -135,9 +138,9 @@ export default function RegisterGrid(props) {
             <RegisterBlock key="regDF" name="DF" value={props.regs.DF} bits={1} size={1} />
             <RegisterBlock key="regIE" name="IE" value={props.regs.IE} bits={1} size={1} />
             <RegisterBlock key="regQ" name="Q" value={props.regs.Q} bits={1} size={1} />
-            <TextField id="IN" label="IN 1(HEX)" variant="filled" value={IN1} inputProps={{ maxLength: 2 }} onChange={IN1Handler} />
-			
-			
+            <TextField id="IN" label="IN 1(HEX)" variant="filled" value={IN1} inputProps={{ maxLength: 2 }} onChange={IN1Handler} disabled={memview.checked} />
+		
+		
             <RegisterBlock key="OUT" name="OUT 1" value={props.regs.OUT[1]} bits={8} size={4} />
 			
 			<TextField id="IN2" label="IN 2(HEX)" variant="filled" value={IN2} inputProps={{ maxLength: 2 }} onChange={IN2Handler} />

@@ -12,9 +12,14 @@ import {useRef} from 'react';
 import {useState} from 'react';
 import RegisterGrid from './RegisterGrid';
 import MemoryView from './MemoryView';
+import Alert from '@mui/material/Alert';
+import Typography from '@mui/material/Typography';
+
+import TAG from "./MemoryView.js";
 let delay = 0;
 
-const cdp = require("./cdp/cdp1802");
+const mem = require("./MemoryView.js");
+const cdp = require("./cdp/cdp1802.js");
 
 const darkTheme = createTheme({
     palette: {
@@ -133,7 +138,7 @@ const inputRef = useRef(null);
                             <MemoryView mem={memory} pc={registers.R[registers.P]} dp={registers.R[registers.X]} upd={changer} />
                             <Stack direction="row" spacing={1} >
                                 <Button variant="contained" color="error" onClick={onResetButton}>RESET</Button>
-                                <Button variant="contained" color="success" onClick={onRun} disabled={runState}>RUN</Button>
+                                <Button variant="contained" color="success" onClick={onRun} disabled={runState} disabled={mem.isInError}>RUN</Button>
                                 <Button variant="contained" color="success" onClick={onStop} disabled={!runState}>STOP</Button>
                                 <Button variant="contained" color="success" onClick={onStep} disabled={runState}>STEP</Button>
                                 <Button variant="contained" color="success" onClick={onNextCycleButton} disabled={runState}>NEXT CYCLE</Button>
@@ -144,6 +149,7 @@ const inputRef = useRef(null);
 								<Button variant="contained" color="success" onClick={onStop} disabled={!runState}>DMA OUT(WIP)</Button>
 								<TextField id="delay" label="Delay in ms" variant="filled" value={Delay} onChange={handleChange} />
                                 <input type='file' id='file' ref={inputFile} style={{display: 'none'}} onChange={onChange} />
+								
                             </Stack>
                         </Stack>
                     </Grid>

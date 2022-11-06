@@ -18,16 +18,42 @@ import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
+import TextField from '@mui/material/TextField';
+import {useRef} from 'react';
+import {useState} from 'react';
+import Switch from '@mui/material/Switch';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 
 
-import CircularProgress from '@mui/material/CircularProgress';
 
 
-export default function CircularIndeterminate() {
-  return (
-    <Box sx={{ display: 'flex' }}>
-      <CircularProgress />
-    </Box>
-  );
+
+
+
+
+export default function RamView(props) {
+
+
+return (
+ 
+ <POPUP/>
+
+);
+
 }
+
+
+  export function POPUP() {
+	  
+	  return (
+	  <Box>
+	  <Alert variant="outlined" severity="error">
+			AAUGHH
+		</Alert>
+	  </Box>
+	  );
+	  
+	  
+  }
