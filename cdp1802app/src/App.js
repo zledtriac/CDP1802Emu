@@ -19,6 +19,7 @@ import TAG from "./MemoryView.js";
 let delay = 0;
 
 const mem = require("./MemoryView.js");
+const mem2 = require("./RAMSYSTEM.js");
 const cdp = require("./cdp/cdp1802.js");
 
 const darkTheme = createTheme({

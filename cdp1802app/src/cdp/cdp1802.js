@@ -123,5 +123,7 @@ module.exports = {
     resetCpu: resetCpu,
     nextCycle: nextCycle,
 	memory: memory,
-	CDPRAM:RAM
+	CDPRAM:RAM,
+	CDPX:registers.X,
+	CDPP:registers.P
 };

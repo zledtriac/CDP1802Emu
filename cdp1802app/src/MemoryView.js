@@ -269,6 +269,12 @@ export default function MemoryView(props) {
   const switchHandler = (event) => {
     setChecked(event.target.checked);
   };
+  
+  
+  const [checked2, setChecked2] = useState(false);
+  const switchHandler2 = (event) => {
+    setChecked2(event.target.checked);
+  };
   var checkedIN2 = checked;
   
 
@@ -322,9 +328,7 @@ export default function MemoryView(props) {
 		<div>
 		Memory left = {65535-totalmem} bytes
 		</div>
-		<script src="RAMSYSTEM.CircularIndeterminate()">
 		
-		</script>
 		</div>
 		<div>
 		I/O Settings::
@@ -333,7 +337,10 @@ export default function MemoryView(props) {
 		Manual input
 		<FormControlLabel control={<Switch defaultChecked />} label="Buffer" value={checked} onChange={switchHandler} />
 		</div>
-		
+		<div>
+		Use Q as a breakpoint off
+		<FormControlLabel control={<Switch defaultChecked />} label="on" value={checked2} onChange={switchHandler2} />
+		</div>
 		
 		</stack>
 		
