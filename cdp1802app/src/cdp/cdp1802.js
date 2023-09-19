@@ -31,21 +31,21 @@ let memory = Array(256).fill(0xFF);
 
 let cpu_init = true;
 
-const getRegisters = function() {
+function getRegisters() {
     return registers;
 };
 
-const getMemory = function() {
+function getMemory() {
     return memory;
 };
 
-const loadMemory = function(data) {
+function loadMemory(data) {
     for(let i = 0; i < data.length; i++) {
         memory[i] = data[i];
     }
 };
 
-const resetCpu = function() {
+function resetCpu() {
     for(let i = 0; i < registers.R.length; i++) {
         registers.R[i] = 0;
     }
@@ -60,7 +60,7 @@ const resetCpu = function() {
     cpu_init = true;
 };
 
-const nextCycle = function() {
+function nextCycle() {
     
     if(registers.S === 0) {
         registers.I = (memory[registers.R[registers.P]] & 0xF0) >> 4;

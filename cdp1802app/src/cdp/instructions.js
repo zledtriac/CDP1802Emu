@@ -1,26 +1,26 @@
 
 let input_data_cnt = 0;
 
-const IDL = function(memory, registers, inputs, outputs) {
+function IDL(memory, registers, inputs, outputs) {
     return 1;
 };
 
-const LDN = function(memory, registers, inputs, outputs) {
+function LDN(memory, registers, inputs, outputs) {
     registers.D = memory[registers.R[registers.N]];
     return 0;
 };
 
-const INC = function(memory, registers, inputs, outputs) {
+function INC(memory, registers, inputs, outputs) {
     registers.R[registers.N] = (registers.R[registers.N] + 1) & 0xFFFF;
     return 0;
 };
 
-const DEC = function(memory, registers, inputs, outputs) {
+function DEC(memory, registers, inputs, outputs) {
     registers.R[registers.N] = (registers.R[registers.N] - 1) & 0xFFFF;
     return 0;
 };
 
-const BR = function(memory, registers, inputs, outputs) {
+function BR(memory, registers, inputs, outputs) {
     const conditions = [
         true,
         registers.Q,
@@ -49,36 +49,36 @@ const BR = function(memory, registers, inputs, outputs) {
     return 0;
 };
 
-const LDA = function(memory, registers, inputs, outputs) {
+function LDA(memory, registers, inputs, outputs) {
     registers.D = memory[registers.R[registers.N]];
     registers.R[registers.N] = (registers.R[registers.N] + 1) & 0xFFFF;
     return 0;
 };
 
-const STR = function(memory, registers, inputs, outputs) {
+function STR(memory, registers, inputs, outputs) {
     memory[registers.R[registers.N]] = registers.D;
     return 0;
 };
 
-const IRX = function(memory, registers, inputs, outputs) {
+function IRX(memory, registers, inputs, outputs) {
     registers.R[registers.X] = (registers.R[registers.X] + 1) & 0xFFFF;
     return 0;
 };
 
-const OUT = function(memory, registers, inputs, outputs) {
+function OUT(memory, registers, inputs, outputs) {
     outputs.N = registers.N & 0x07;
     outputs.BUS = inputs.BUS = memory[registers.R[registers.X]];
     registers.R[registers.X] = (registers.R[registers.X] + 1) & 0xFFFF;
     return 0;
 };
 
-const INP = function(memory, registers, inputs, outputs) {
+function INP(memory, registers, inputs, outputs) {
     outputs.N = registers.N & 0x07;
     memory[registers.R[registers.X]] = registers.D = inputs.BUS;
     return 0;
 };
 
-const RET = function(memory, registers, inputs, outputs) {
+function RET(memory, registers, inputs, outputs) {
     registers.P = memory[registers.R[registers.X]] & 0x0F;
     registers.X = (memory[registers.R[registers.X]] & 0xF0) >> 4;
     registers.R[registers.X] = (registers.R[registers.X] + 1) & 0xFFFF;
@@ -86,7 +86,7 @@ const RET = function(memory, registers, inputs, outputs) {
     return 0;     
 };
 
-const DIS = function(memory, registers, inputs, outputs) {
+function DIS(memory, registers, inputs, outputs) {
     registers.P = memory[registers.R[registers.X]] & 0x0F;
     registers.X = (memory[registers.R[registers.X]] & 0xF0) >> 4;
     registers.R[registers.X] = (registers.R[registers.X] + 1) & 0xFFFF;
@@ -94,52 +94,52 @@ const DIS = function(memory, registers, inputs, outputs) {
     return 0;     
 };
 
-const LDXA = function(memory, registers, inputs, outputs) {
+function LDXA(memory, registers, inputs, outputs) {
     registers.D = memory[registers.R[registers.X]];
     registers.R[registers.X] = (registers.R[registers.X] + 1) & 0xFFFF;
     return 0;
 };
 
-const STXD = function(memory, registers, inputs, outputs) {
+function STXD(memory, registers, inputs, outputs) {
     memory[registers.R[registers.X]] = registers.D;
     registers.R[registers.X] = (registers.R[registers.X] - 1) & 0xFFFF;
     return 0;
 };
 
-const ADC = function(memory, registers, inputs, outputs) {
+function ADC(memory, registers, inputs, outputs) {
     registers.D = memory[registers.R[registers.X]] + registers.D + registers.DF;
     registers.DF = (registers.D & 0x100) ? 1 : 0;
     registers.D = registers.D & 0xFF;
     return 0;
 };
 
-const SDB = function(memory, registers, inputs, outputs) {
+function SDB(memory, registers, inputs, outputs) {
     registers.D = memory[registers.R[registers.X]] - registers.D - (registers.DF ^ 0x01);
     registers.DF = (registers.D & 0x100) ? 0 : 1;
     registers.D = registers.D & 0xFF;
     return 0;
 };
 
-const SHRC = function(memory, registers, inputs, outputs) {
+function SHRC(memory, registers, inputs, outputs) {
     let temp_df = registers.D & 0x01;
     registers.D = ((registers.D >> 1) | ((registers.DF) ? 0x80 : 0x00)) & 0xFF;
     registers.DF = temp_df;
     return 0;
 };
 
-const SMB = function(memory, registers, inputs, outputs) {
+function SMB(memory, registers, inputs, outputs) {
     registers.D = registers.D - memory[registers.R[registers.X]] - (registers.DF ^ 0x01);
     registers.DF = (registers.D & 0x100) ? 0 : 1;
     registers.D = registers.D & 0xFF;
     return 0;
 };
 
-const SAV = function(memory, registers, inputs, outputs) {
+function SAV(memory, registers, inputs, outputs) {
     memory[registers.R[registers.X]] = registers.T;
     return 0;
 };
 
-const MARK = function(memory, registers, inputs, outputs) {
+function MARK(memory, registers, inputs, outputs) {
     registers.T = (registers.P | (registers.X << 4)) & 0xFF;
     memory[registers.R[2]] = registers.T;
     registers.X = registers.P;
@@ -147,12 +147,12 @@ const MARK = function(memory, registers, inputs, outputs) {
     return 0;
 };
 
-const REQ = function(memory, registers, inputs, outputs) {
+function REQ(memory, registers, inputs, outputs) {
     registers.Q = registers.N & 0x01;
     return 0;
 };
 
-const ADCI = function(memory, registers, inputs, outputs) {
+function ADCI(memory, registers, inputs, outputs) {
     registers.D = memory[registers.R[registers.P]] + registers.D + registers.DF;
     registers.DF = (registers.D & 0x100) ? 1 : 0;
     registers.D = registers.D & 0xFF;
@@ -160,7 +160,7 @@ const ADCI = function(memory, registers, inputs, outputs) {
     return 0;
 };
 
-const SDBI = function(memory, registers, inputs, outputs) {
+function SDBI(memory, registers, inputs, outputs) {
     registers.D = memory[registers.R[registers.P]] - registers.D - (registers.DF ^ 0x01);
     registers.DF = (registers.D & 0x100) ? 0 : 1;
     registers.D = registers.D & 0xFF;
@@ -168,13 +168,13 @@ const SDBI = function(memory, registers, inputs, outputs) {
     return 0;
 };
 
-const SHLC = function(memory, registers, inputs, outputs) {
+function SHLC(memory, registers, inputs, outputs) {
     registers.D = (registers.D << 1) | registers.DF;
     registers.DF = (registers.D & 0x100) ? 1 : 0;
     return 0;
 };
 
-const SMBI = function(memory, registers, inputs, outputs) {
+function SMBI(memory, registers, inputs, outputs) {
     registers.D = registers.D - memory[registers.R[registers.X]] - (registers.DF ^ 0x01);
     registers.DF = (registers.D & 0x100) ? 0 : 1;
     registers.D = registers.D & 0xFF;
@@ -182,7 +182,7 @@ const SMBI = function(memory, registers, inputs, outputs) {
     return 0;
 };
 
-const GLO = function(memory, registers, inputs, outputs) {
+function GLO(memory, registers, inputs, outputs) {
     if(registers.I & 0x01) {
         registers.D = (registers.R[registers.N] >> 8) & 0x00FF;
         return 0;
@@ -192,7 +192,7 @@ const GLO = function(memory, registers, inputs, outputs) {
     return 0;
 };
 
-const PLO = function(memory, registers, inputs, outputs) {
+function PLO(memory, registers, inputs, outputs) {
     if(registers.I & 0x01) {
         registers.R[registers.N] = (registers.R[registers.N] & 0x00FF) | (registers.D << 8);
         return 0;
@@ -202,7 +202,7 @@ const PLO = function(memory, registers, inputs, outputs) {
     return 0;
 };
 
-const LBR = function(memory, registers, inputs, outputs) {
+function LBR(memory, registers, inputs, outputs) {
     const conditions = [
         [ true,               true          ],
         [ registers.Q,        true          ],
@@ -239,7 +239,7 @@ const LBR = function(memory, registers, inputs, outputs) {
     return 0;
 };
 
-const SEP = function(memory, registers, inputs, outputs) {
+function SEP(memory, registers, inputs, outputs) {
     if(registers.I & 0x01) {
         registers.P = registers.N;
         return 0;
@@ -249,7 +249,7 @@ const SEP = function(memory, registers, inputs, outputs) {
     return 0;
 };
 
-const LDX = function(memory, registers, inputs, outputs) {    
+function LDX(memory, registers, inputs, outputs) {    
     let MRX = memory[registers.R[registers.X]];
     if(registers.N & 0x08) MRX = memory[registers.R[registers.P]];
     
@@ -300,7 +300,7 @@ const instructions = [
     [ LDX, LDX, LDX,  LDX,  LDX, LDX, LDX,  LDX, LDX, LDX,  LDX, LDX, LDX,  LDX,  LDX,  LDX  ]  //Group F
 ];
 
-const executeInstruction = function(memory, registers, inputs, outputs, init) {
+function executeInstruction(memory, registers, inputs, outputs, init) {
     if(init) {
         input_data_cnt = 0;
         registers.S = 0;
